@@ -35,7 +35,7 @@ public class LoggingAspect {
      */
     @Pointcut("within(com.jruddell.chat.repository..*) || within(com.jruddell.chat.service..*) || within(com.jruddell.chat.web.rest..*)")
     public void loggingPointcut() {
-        // Method is empty as this is just a Poincut, the implementations are in the advices.
+        // Method is empty as this is just a Pointcut, the implementations are in the advices.
     }
 
     /**
