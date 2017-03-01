@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Principal } from '../auth/principal.service';
 import { AuthServerProvider } from '../auth/auth-jwt.service';
 import { JhiTrackerService } from '../tracker/tracker.service';
+import { EventManager} from 'ng-jhipster';
 
 @Injectable()
 export class LoginService {
@@ -10,7 +11,8 @@ export class LoginService {
     constructor (
         private principal: Principal,
         private trackerService: JhiTrackerService,
-        private authServerProvider: AuthServerProvider
+        private authServerProvider: AuthServerProvider,
+        private eventManager: EventManager
     ) {}
 
     login (credentials, callback?) {
@@ -37,5 +39,9 @@ export class LoginService {
     logout () {
         this.authServerProvider.logout().subscribe();
         this.principal.authenticate(null);
+        this.eventManager.broadcast({
+            name: 'logoutSuccess',
+            content: 'Sending Logout Success'
+        });
     }
 }
