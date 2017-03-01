@@ -6,6 +6,7 @@ export * from './alert/alert-error.component';
 export * from './auth/has-any-authority.directive';
 export * from './login/login.component';
 export * from './util/request-util';
+export * from './chat/chat.service';
 export * from './shared-libs.module';
 export * from './shared-common.module';
 export * from './shared.module';
