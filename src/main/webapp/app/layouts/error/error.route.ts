@@ -1,25 +1,36 @@
 import { Routes } from '@angular/router';
 
-import { UserRouteAccessService } from '../../shared';
 import { ErrorComponent } from './error.component';
 
 export const errorRoute: Routes = [
-  {
-    path: 'error',
-    component: ErrorComponent,
-    data: {
-      authorities: [],
-      pageTitle: 'Error page!'
+    {
+        path: 'error',
+        component: ErrorComponent,
+        data: {
+            authorities: [],
+            pageTitle: 'chat'
+        }
     },
-    canActivate: [UserRouteAccessService]
-  },
-  {
-    path: 'accessdenied',
-    component: ErrorComponent,
-    data: {
-      authorities: [],
-      pageTitle: 'Error page!'
+    {
+        path: 'accessdenied',
+        component: ErrorComponent,
+        data: {
+            authorities: [],
+            pageTitle: 'chat',
+            error403: true
+        }
     },
-    canActivate: [UserRouteAccessService]
-  }
+    {
+        path: '404',
+        component: ErrorComponent,
+        data: {
+            authorities: [],
+            pageTitle: 'chat',
+            error404: true
+        }
+    },
+    {
+        path: '**',
+        redirectTo: '/404'
+    }
 ];

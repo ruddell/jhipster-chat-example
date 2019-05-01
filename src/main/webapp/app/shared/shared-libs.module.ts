@@ -1,25 +1,20 @@
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { HttpModule } from '@angular/http';
 import { CommonModule } from '@angular/common';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgJhipsterModule } from 'ng-jhipster';
-import { InfiniteScrollModule } from 'angular2-infinite-scroll';
+import { InfiniteScrollModule } from 'ngx-infinite-scroll';
+import { CookieModule } from 'ngx-cookie';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @NgModule({
-    imports: [
-        NgbModule.forRoot(),
-        NgJhipsterModule.forRoot({
-        }),
-        InfiniteScrollModule
-    ],
-    exports: [
-        FormsModule,
-        HttpModule,
-        CommonModule,
-        NgbModule,
-        NgJhipsterModule,
-        InfiniteScrollModule
-    ]
+    imports: [NgbModule.forRoot(), InfiniteScrollModule, CookieModule.forRoot(), FontAwesomeModule],
+    exports: [FormsModule, CommonModule, NgbModule, NgJhipsterModule, InfiniteScrollModule, FontAwesomeModule]
 })
-export class ChatSharedLibsModule {}
+export class ChatSharedLibsModule {
+    static forRoot() {
+        return {
+            ngModule: ChatSharedLibsModule
+        };
+    }
+}

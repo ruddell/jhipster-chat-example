@@ -1,12 +1,17 @@
-import { Route } from '@angular/router';
+import { Injectable } from '@angular/core';
+import { Resolve, ActivatedRouteSnapshot, RouterStateSnapshot, Route } from '@angular/router';
+import { JhiPaginationUtil, JhiResolvePagingParams } from 'ng-jhipster';
 
-import { UserRouteAccessService } from '../../shared';
 import { AuditsComponent } from './audits.component';
 
 export const auditsRoute: Route = {
-  path: 'audits',
-  component: AuditsComponent,
-  data: {
-    pageTitle: 'Audits'
-  }
+    path: 'audits',
+    component: AuditsComponent,
+    resolve: {
+        pagingParams: JhiResolvePagingParams
+    },
+    data: {
+        pageTitle: 'Audits',
+        defaultSort: 'auditEventDate,desc'
+    }
 };

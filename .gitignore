@@ -3,7 +3,6 @@
 ######################
 /target/www/**
 /src/test/javascript/coverage/
-/src/test/javascript/PhantomJS*/
 
 ######################
 # Node
@@ -12,6 +11,8 @@
 node_tmp/
 node_modules/
 npm-debug.log.*
+/.awcache/*
+/.cache-loader/*
 
 ######################
 # SASS
@@ -58,6 +59,8 @@ local.properties
 *.ipr
 *.ids
 *.orig
+classes/
+out/
 
 ######################
 # Visual Studio Code
@@ -115,7 +118,7 @@ Desktop.ini
 ######################
 # Logs
 ######################
-*.log
+*.log*
 
 ######################
 # Others

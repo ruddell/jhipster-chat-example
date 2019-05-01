@@ -1,80 +1,71 @@
-import { browser, element, by, $ } from 'protractor';
+import { browser, element, by, ExpectedConditions as ec } from 'protractor';
+
+import { NavBarPage, SignInPage } from '../page-objects/jhi-page-objects';
+
+const expect = chai.expect;
 
 describe('administration', () => {
+    let navBarPage: NavBarPage;
+    let signInPage: SignInPage;
 
-    const username = element(by.id('username'));
-    const password = element(by.id('password'));
-    const accountMenu = element(by.id('account-menu'));
-    const adminMenu = element(by.id('admin-menu'));
-    const login = element(by.id('login'));
-    const logout = element(by.id('logout'));
-
-    beforeAll(() => {
-        browser.get('/');
-
-        accountMenu.click();
-        login.click();
-
-        username.sendKeys('admin');
-        password.sendKeys('admin');
-        element(by.css('button[type=submit]')).click();
-        browser.waitForAngular();
+    before(async () => {
+        await browser.get('/');
+        navBarPage = new NavBarPage(true);
+        signInPage = await navBarPage.getSignInPage();
+        await signInPage.autoSignInUsing('admin', 'admin');
+        await browser.wait(ec.visibilityOf(navBarPage.adminMenu), 5000);
     });
 
-    beforeEach(() => {
-        adminMenu.click();
+    beforeEach(async () => {
+        await navBarPage.clickOnAdminMenu();
     });
 
-    it('should load user management', () => {
-        element(by.css('[routerLink="user-management"]')).click();
-        const expect1 = /Users/;
-        element.all(by.css('h2 span')).first().getText().then((value) => {
-            expect(value).toMatch(expect1);
-        });
+    it('should load user management', async () => {
+        await navBarPage.clickOnAdmin('user-management');
+        const expect1 = 'Users';
+        const value1 = await element(by.id('user-management-page-heading')).getText();
+        expect(value1).to.eq(expect1);
     });
 
-    it('should load metrics', () => {
-        element(by.css('[routerLink="jhi-metrics"]')).click();
-        const expect1 = /Application Metrics/;
-        element.all(by.css('h2 span')).first().getText().then((value) => {
-            expect(value).toMatch(expect1);
-        });
+    it('should load metrics', async () => {
+        await navBarPage.clickOnAdmin('jhi-metrics');
+        const expect1 = 'Application Metrics';
+        const value1 = await element(by.id('metrics-page-heading')).getText();
+        expect(value1).to.eq(expect1);
     });
 
-    it('should load health', () => {
-        element(by.css('[routerLink="jhi-health"]')).click();
-        const expect1 = /Health Checks/;
-        element.all(by.css('h2 span')).first().getText().then((value) => {
-            expect(value).toMatch(expect1);
-        });
+    it('should load health', async () => {
+        await navBarPage.clickOnAdmin('jhi-health');
+        const expect1 = 'Health Checks';
+        const value1 = await element(by.id('health-page-heading')).getText();
+        expect(value1).to.eq(expect1);
     });
 
-    it('should load configuration', () => {
-        element(by.css('[routerLink="jhi-configuration"]')).click();
-        const expect1 = /Configuration/;
-        element.all(by.css('h2')).first().getText().then((value) => {
-            expect(value).toMatch(expect1);
-        });
+    it('should load configuration', async () => {
+        await navBarPage.clickOnAdmin('jhi-configuration');
+        await browser.sleep(500);
+        const expect1 = 'Configuration';
+        const value1 = await element(by.id('configuration-page-heading')).getText();
+        expect(value1).to.eq(expect1);
     });
 
-    it('should load audits', () => {
-        element(by.css('[routerLink="audits"]')).click();
-        const expect1 = /Audits/;
-        element.all(by.css('h2')).first().getText().then((value) => {
-            expect(value).toMatch(expect1);
-        });
+    it('should load audits', async () => {
+        await navBarPage.clickOnAdmin('audits');
+        await browser.sleep(500);
+        const expect1 = 'Audits';
+        const value1 = await element(by.id('audits-page-heading')).getText();
+        expect(value1).to.eq(expect1);
     });
 
-    it('should load logs', () => {
-        element(by.css('[routerLink="logs"]')).click();
-        const expect1 = /Logs/;
-        element.all(by.css('h2')).first().getText().then((value) => {
-            expect(value).toMatch(expect1);
-        });
+    it('should load logs', async () => {
+        await navBarPage.clickOnAdmin('logs');
+        await browser.sleep(500);
+        const expect1 = 'Logs';
+        const value1 = await element(by.id('logs-page-heading')).getText();
+        expect(value1).to.eq(expect1);
     });
 
-    afterAll(() => {
-        accountMenu.click();
-        logout.click();
+    after(async () => {
+        await navBarPage.autoSignOut();
     });
 });

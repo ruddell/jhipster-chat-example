@@ -2,8 +2,8 @@ import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 import { ActivatedRoute } from '@angular/router';
 
-import { PasswordResetFinish } from './password-reset-finish.service';
-import { LoginModalService } from '../../../shared';
+import { LoginModalService } from 'app/core';
+import { PasswordResetFinishService } from './password-reset-finish.service';
 
 @Component({
     selector: 'jhi-password-reset-finish',
@@ -20,12 +20,12 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
     key: string;
 
     constructor(
-        private passwordResetFinish: PasswordResetFinish,
+        private passwordResetFinishService: PasswordResetFinishService,
         private loginModalService: LoginModalService,
         private route: ActivatedRoute,
-        private elementRef: ElementRef, private renderer: Renderer
-    ) {
-        }
+        private elementRef: ElementRef,
+        private renderer: Renderer
+    ) {}
 
     ngOnInit() {
         this.route.queryParams.subscribe(params => {
@@ -37,7 +37,7 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
 
     ngAfterViewInit() {
         if (this.elementRef.nativeElement.querySelector('#password') != null) {
-          this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#password'), 'focus', []);
+            this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#password'), 'focus', []);
         }
     }
 
@@ -47,12 +47,15 @@ export class PasswordResetFinishComponent implements OnInit, AfterViewInit {
         if (this.resetAccount.password !== this.confirmPassword) {
             this.doNotMatch = 'ERROR';
         } else {
-            this.passwordResetFinish.save({key: this.key, newPassword: this.resetAccount.password}).subscribe(() => {
-                this.success = 'OK';
-            }, () => {
-                this.success = null;
-                this.error = 'ERROR';
-            });
+            this.passwordResetFinishService.save({ key: this.key, newPassword: this.resetAccount.password }).subscribe(
+                () => {
+                    this.success = 'OK';
+                },
+                () => {
+                    this.success = null;
+                    this.error = 'ERROR';
+                }
+            );
         }
     }
 

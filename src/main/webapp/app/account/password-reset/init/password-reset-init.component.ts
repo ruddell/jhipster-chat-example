@@ -1,6 +1,6 @@
 import { Component, OnInit, AfterViewInit, Renderer, ElementRef } from '@angular/core';
-
-import { PasswordResetInit } from './password-reset-init.service';
+import { EMAIL_NOT_FOUND_TYPE } from 'app/shared';
+import { PasswordResetInitService } from './password-reset-init.service';
 
 @Component({
     selector: 'jhi-password-reset-init',
@@ -12,12 +12,7 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
     resetAccount: any;
     success: string;
 
-    constructor(
-        private passwordResetInit: PasswordResetInit,
-        private elementRef: ElementRef,
-        private renderer: Renderer
-    ) {
-        }
+    constructor(private passwordResetInitService: PasswordResetInitService, private elementRef: ElementRef, private renderer: Renderer) {}
 
     ngOnInit() {
         this.resetAccount = {};
@@ -27,20 +22,22 @@ export class PasswordResetInitComponent implements OnInit, AfterViewInit {
         this.renderer.invokeElementMethod(this.elementRef.nativeElement.querySelector('#email'), 'focus', []);
     }
 
-    requestReset () {
-
+    requestReset() {
         this.error = null;
         this.errorEmailNotExists = null;
 
-        this.passwordResetInit.save(this.resetAccount.email).subscribe(() => {
-            this.success = 'OK';
-        }, (response) => {
-            this.success = null;
-            if (response.status === 400 && response.data === 'e-mail address not registered') {
-                this.errorEmailNotExists = 'ERROR';
-            } else {
-                this.error = 'ERROR';
+        this.passwordResetInitService.save(this.resetAccount.email).subscribe(
+            () => {
+                this.success = 'OK';
+            },
+            response => {
+                this.success = null;
+                if (response.status === 400 && response.error.type === EMAIL_NOT_FOUND_TYPE) {
+                    this.errorEmailNotExists = 'ERROR';
+                } else {
+                    this.error = 'ERROR';
+                }
             }
-        });
+        );
     }
 }

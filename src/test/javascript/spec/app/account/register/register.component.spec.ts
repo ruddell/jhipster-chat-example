@@ -1,14 +1,12 @@
 import { ComponentFixture, TestBed, async, inject, tick, fakeAsync } from '@angular/core/testing';
-import { Renderer, ElementRef } from '@angular/core';
-import { Observable } from 'rxjs/Rx';
-import { ChatTestModule } from '../../../test.module';
-import { LoginModalService } from '../../../../../../main/webapp/app/shared';
-import { Register } from '../../../../../../main/webapp/app/account/register/register.service';
-import { RegisterComponent } from '../../../../../../main/webapp/app/account/register/register.component';
+import { Observable, of, throwError } from 'rxjs';
 
+import { ChatTestModule } from '../../../test.module';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from 'app/shared';
+import { Register } from 'app/account/register/register.service';
+import { RegisterComponent } from 'app/account/register/register.component';
 
 describe('Component Tests', () => {
-
     describe('RegisterComponent', () => {
         let fixture: ComponentFixture<RegisterComponent>;
         let comp: RegisterComponent;
@@ -16,27 +14,10 @@ describe('Component Tests', () => {
         beforeEach(async(() => {
             TestBed.configureTestingModule({
                 imports: [ChatTestModule],
-                declarations: [RegisterComponent],
-                providers: [
-                    Register,
-                    {
-                        provide: LoginModalService,
-                        useValue: null
-                    },
-                    {
-                        provide: Renderer,
-                        useValue: null
-                    },
-                    {
-                        provide: ElementRef,
-                        useValue: null
-                    }
-                ]
-            }).overrideComponent(RegisterComponent, {
-                set: {
-                    template: ''
-                }
-            }).compileComponents();
+                declarations: [RegisterComponent]
+            })
+                .overrideTemplate(RegisterComponent, '')
+                .compileComponents();
         }));
 
         beforeEach(() => {
@@ -45,7 +26,7 @@ describe('Component Tests', () => {
             comp.ngOnInit();
         });
 
-        it('should ensure the two passwords entered match', function () {
+        it('should ensure the two passwords entered match', () => {
             comp.registerAccount.password = 'password';
             comp.confirmPassword = 'non-matching';
 
@@ -54,83 +35,84 @@ describe('Component Tests', () => {
             expect(comp.doNotMatch).toEqual('ERROR');
         });
 
-        it('should update success to OK after creating an account',
-            inject([Register],
-                fakeAsync((service: Register) => {
-                    spyOn(service, 'save').and.returnValue(Observable.of({}));
-                    comp.registerAccount.password = comp.confirmPassword = 'password';
+        it('should update success to OK after creating an account', inject(
+            [Register],
+            fakeAsync((service: Register) => {
+                spyOn(service, 'save').and.returnValue(of({}));
+                comp.registerAccount.password = comp.confirmPassword = 'password';
 
-                    comp.register();
-                    tick();
+                comp.register();
+                tick();
 
-                    expect(service.save).toHaveBeenCalledWith({
-                        password: 'password',
-                        langKey: 'en'
-                    });
-                    expect(comp.success).toEqual(true);
-                    expect(comp.registerAccount.langKey).toEqual('en');
-                    
-                    expect(comp.errorUserExists).toBeNull();
-                    expect(comp.errorEmailExists).toBeNull();
-                    expect(comp.error).toBeNull();
-                })
-            )
-        );
+                expect(service.save).toHaveBeenCalledWith({
+                    password: 'password',
+                    langKey: 'en'
+                });
+                expect(comp.success).toEqual(true);
+                expect(comp.registerAccount.langKey).toEqual('en');
+                expect(comp.errorUserExists).toBeNull();
+                expect(comp.errorEmailExists).toBeNull();
+                expect(comp.error).toBeNull();
+            })
+        ));
 
-        it('should notify of user existence upon 400/login already in use',
-            inject([Register],
-                fakeAsync((service: Register) => {
-                    spyOn(service, 'save').and.returnValue(Observable.throw({
+        it('should notify of user existence upon 400/login already in use', inject(
+            [Register],
+            fakeAsync((service: Register) => {
+                spyOn(service, 'save').and.returnValue(
+                    throwError({
                         status: 400,
-                        _body: 'login already in use'
-                    }));
-                    comp.registerAccount.password = comp.confirmPassword = 'password';
+                        error: { type: LOGIN_ALREADY_USED_TYPE }
+                    })
+                );
+                comp.registerAccount.password = comp.confirmPassword = 'password';
 
-                    comp.register();
-                    tick();
+                comp.register();
+                tick();
 
-                    expect(comp.errorUserExists).toEqual('ERROR');
-                    expect(comp.errorEmailExists).toBeNull();
-                    expect(comp.error).toBeNull();
-                })
-            )
-        );
+                expect(comp.errorUserExists).toEqual('ERROR');
+                expect(comp.errorEmailExists).toBeNull();
+                expect(comp.error).toBeNull();
+            })
+        ));
 
-        it('should notify of email existence upon 400/e-mail address already in use',
-            inject([Register],
-                fakeAsync((service: Register) => {
-                    spyOn(service, 'save').and.returnValue(Observable.throw({
+        it('should notify of email existence upon 400/email address already in use', inject(
+            [Register],
+            fakeAsync((service: Register) => {
+                spyOn(service, 'save').and.returnValue(
+                    throwError({
                         status: 400,
-                        _body: 'e-mail address already in use'
-                    }));
-                    comp.registerAccount.password = comp.confirmPassword = 'password';
+                        error: { type: EMAIL_ALREADY_USED_TYPE }
+                    })
+                );
+                comp.registerAccount.password = comp.confirmPassword = 'password';
 
-                    comp.register();
-                    tick();
+                comp.register();
+                tick();
 
-                    expect(comp.errorEmailExists).toEqual('ERROR');
-                    expect(comp.errorUserExists).toBeNull();
-                    expect(comp.error).toBeNull();
-                })
-            )
-        );
+                expect(comp.errorEmailExists).toEqual('ERROR');
+                expect(comp.errorUserExists).toBeNull();
+                expect(comp.error).toBeNull();
+            })
+        ));
 
-        it('should notify of generic error',
-            inject([Register],
-                fakeAsync((service: Register) => {
-                    spyOn(service, 'save').and.returnValue(Observable.throw({
+        it('should notify of generic error', inject(
+            [Register],
+            fakeAsync((service: Register) => {
+                spyOn(service, 'save').and.returnValue(
+                    throwError({
                         status: 503
-                    }));
-                    comp.registerAccount.password = comp.confirmPassword = 'password';
+                    })
+                );
+                comp.registerAccount.password = comp.confirmPassword = 'password';
 
-                    comp.register();
-                    tick();
+                comp.register();
+                tick();
 
-                    expect(comp.errorUserExists).toBeNull();
-                    expect(comp.errorEmailExists).toBeNull();
-                    expect(comp.error).toEqual('ERROR');
-                })
-            )
-        );
+                expect(comp.errorUserExists).toBeNull();
+                expect(comp.errorEmailExists).toBeNull();
+                expect(comp.error).toEqual('ERROR');
+            })
+        ));
     });
 });
