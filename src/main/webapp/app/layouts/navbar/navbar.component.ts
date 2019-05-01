@@ -2,20 +2,16 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
 
-import { ProfileService } from '../profiles/profile.service'; // FIXME barrel doesnt work here
-import { Principal, LoginModalService, LoginService } from '../../shared';
-
-import { VERSION, DEBUG_INFO_ENABLED } from '../../app.constants';
+import { VERSION } from 'app/app.constants';
+import { AccountService, LoginModalService, LoginService } from 'app/core';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
 
 @Component({
     selector: 'jhi-navbar',
     templateUrl: './navbar.component.html',
-    styleUrls: [
-        'navbar.css'
-    ]
+    styleUrls: ['navbar.css']
 })
 export class NavbarComponent implements OnInit {
-
     inProduction: boolean;
     isNavbarCollapsed: boolean;
     languages: any[];
@@ -25,30 +21,28 @@ export class NavbarComponent implements OnInit {
 
     constructor(
         private loginService: LoginService,
-        private principal: Principal,
+        private accountService: AccountService,
         private loginModalService: LoginModalService,
         private profileService: ProfileService,
         private router: Router
     ) {
-        this.version = DEBUG_INFO_ENABLED ? 'v' + VERSION : '';
+        this.version = VERSION ? 'v' + VERSION : '';
         this.isNavbarCollapsed = true;
     }
 
     ngOnInit() {
-
-        this.profileService.getProfileInfo().subscribe(profileInfo => {
+        this.profileService.getProfileInfo().then(profileInfo => {
             this.inProduction = profileInfo.inProduction;
             this.swaggerEnabled = profileInfo.swaggerEnabled;
         });
     }
-
 
     collapseNavbar() {
         this.isNavbarCollapsed = true;
     }
 
     isAuthenticated() {
-        return this.principal.isAuthenticated();
+        return this.accountService.isAuthenticated();
     }
 
     login() {
@@ -66,6 +60,6 @@ export class NavbarComponent implements OnInit {
     }
 
     getImageUrl() {
-        return this.isAuthenticated() ? this.principal.getImageUrl() : null;
+        return this.isAuthenticated() ? this.accountService.getImageUrl() : null;
     }
 }

@@ -1,14 +1,9 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ChatSharedModule } from '../shared';
+import { ChatSharedModule } from 'app/shared';
 
 import {
-    Register,
-    Activate,
-    Password,
-    PasswordResetInit,
-    PasswordResetFinish,
     PasswordStrengthBarComponent,
     RegisterComponent,
     ActivateComponent,
@@ -16,19 +11,12 @@ import {
     PasswordResetInitComponent,
     PasswordResetFinishComponent,
     SettingsComponent,
-    SocialRegisterComponent,
-    SocialAuthComponent,
     accountState
 } from './';
 
 @NgModule({
-    imports: [
-        ChatSharedModule,
-        RouterModule.forRoot(accountState, { useHash: true })
-    ],
+    imports: [ChatSharedModule, RouterModule.forChild(accountState)],
     declarations: [
-        SocialRegisterComponent,
-        SocialAuthComponent,
         ActivateComponent,
         RegisterComponent,
         PasswordComponent,
@@ -36,13 +24,6 @@ import {
         PasswordResetInitComponent,
         PasswordResetFinishComponent,
         SettingsComponent
-    ],
-    providers: [
-        Register,
-        Activate,
-        Password,
-        PasswordResetInit,
-        PasswordResetFinish
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

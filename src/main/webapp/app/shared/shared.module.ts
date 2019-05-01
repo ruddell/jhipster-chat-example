@@ -1,60 +1,21 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { DatePipe } from '@angular/common';
+import { NgbDateAdapter } from '@ng-bootstrap/ng-bootstrap';
 
-import { CookieService } from 'angular2-cookie/services/cookies.service';
-import {
-    ChatSharedLibsModule,
-    ChatSharedCommonModule,
-    CSRFService,
-    AuthService,
-    AuthServerProvider,
-    AccountService,
-    UserService,
-    StateStorageService,
-    LoginService,
-    LoginModalService,
-    Principal,
-    JhiTrackerService,
-    HasAnyAuthorityDirective,
-    JhiSocialComponent,
-    SocialService,
-    JhiLoginModalComponent
-} from './';
+import { NgbDateMomentAdapter } from './util/datepicker-adapter';
+import { ChatSharedLibsModule, ChatSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective } from './';
 
 @NgModule({
-    imports: [
-        ChatSharedLibsModule,
-        ChatSharedCommonModule
-    ],
-    declarations: [
-        JhiSocialComponent,
-        JhiLoginModalComponent,
-        HasAnyAuthorityDirective
-    ],
-    providers: [
-        CookieService,
-        LoginService,
-        LoginModalService,
-        AccountService,
-        StateStorageService,
-        Principal,
-        CSRFService,
-        JhiTrackerService,
-        AuthServerProvider,
-        SocialService,
-        AuthService,
-        UserService,
-        DatePipe
-    ],
+    imports: [ChatSharedLibsModule, ChatSharedCommonModule],
+    declarations: [JhiLoginModalComponent, HasAnyAuthorityDirective],
+    providers: [{ provide: NgbDateAdapter, useClass: NgbDateMomentAdapter }],
     entryComponents: [JhiLoginModalComponent],
-    exports: [
-        ChatSharedCommonModule,
-        JhiSocialComponent,
-        JhiLoginModalComponent,
-        HasAnyAuthorityDirective,
-        DatePipe
-    ],
+    exports: [ChatSharedCommonModule, JhiLoginModalComponent, HasAnyAuthorityDirective],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
-
 })
-export class ChatSharedModule {}
+export class ChatSharedModule {
+    static forRoot() {
+        return {
+            ngModule: ChatSharedModule
+        };
+    }
+}

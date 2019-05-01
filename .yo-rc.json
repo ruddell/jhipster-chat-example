@@ -1,6 +1,6 @@
 {
   "generator-jhipster": {
-    "jhipsterVersion": "4.0.6",
+    "jhipsterVersion": "5.8.2",
     "baseName": "chat",
     "packageName": "com.jruddell.chat",
     "packageFolder": "com/jruddell/chat",
@@ -18,7 +18,7 @@
     "buildTool": "maven",
     "enableSocialSignIn": true,
     "jwtSecretKey": "1884df9e0019fef70832c06c7fe2c9970c613060",
-    "clientFramework": "angular2",
+    "clientFramework": "angularX",
     "useSass": false,
     "clientPackageManager": "yarn",
     "applicationType": "monolith",
@@ -26,6 +26,11 @@
       "protractor"
     ],
     "jhiPrefix": "jhi",
-    "enableTranslation": false
+    "enableTranslation": false,
+    "cacheProvider": "no",
+    "enableHibernateCache": false,
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": []
   }
 }

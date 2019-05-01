@@ -2,8 +2,28 @@
 Bootstrap tweaks
 ===============================================================*/
 
-body, h1, h2, h3, h4 {
+body,
+h1,
+h2,
+h3,
+h4 {
     font-weight: 300;
+}
+
+body {
+    background: #e4e5e6;
+}
+
+a {
+    color: #533f03;
+    font-weight: bold;
+}
+
+a:hover {
+    color: #533f03;
+    font-weight: bold;
+    /* make sure browsers use the pointer cursor for anchors, even with no href */
+    cursor: pointer;
 }
 
 /* ==========================================================================
@@ -21,12 +41,13 @@ Generic styles
 ========================================================================== */
 
 /* Error highlight on input fields */
-.ng-valid[required], .ng-valid.required  {
-  border-left: 5px solid green;
+.ng-valid[required],
+.ng-valid.required {
+    border-left: 5px solid green;
 }
 
-.ng-invalid:not(form)  {
-  border-left: 5px solid red;
+.ng-invalid:not(form) {
+    border-left: 5px solid red;
 }
 
 /* other generic styles */
@@ -56,7 +77,7 @@ Generic styles
 
 .break {
     white-space: normal;
-    word-break:break-all;
+    word-break: break-all;
 }
 
 .readonly {
@@ -64,35 +85,22 @@ Generic styles
     opacity: 1;
 }
 
-/*FIXME this is to support grids in table class; */
-table td[class*=col-], table th[class*=col-] {
-    position: static;
-    display: table-cell;
-    float: none;
-}
-
 .footer {
-    border-top: 1px solid rgba(0,0,0,.125);
+    border-top: 1px solid rgba(0, 0, 0, 0.125);
 }
 
-/* ==========================================================================
-make sure browsers use the pointer cursor for anchors, even with no href
-========================================================================== */
-a:hover {
-  cursor: pointer;
-}
-
-.hand {
+.hand,
+[jhisortby] {
     cursor: pointer;
 }
 
 /* ==========================================================================
 Custom alerts for notification
 ========================================================================== */
-.alerts .alert{
+.alerts .alert {
     text-overflow: ellipsis;
 }
-.alert pre{
+.alert pre {
     background: none;
     border: none;
     font: inherit;
@@ -136,26 +144,38 @@ Custom alerts for notification
 entity tables helpers
 ========================================================================== */
 /* Remove Bootstrap padding from the element
-   http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
-.no-padding-left { padding-left: 0 !important; }
-.no-padding-right { padding-right: 0 !important; }
-.no-padding-top { padding-top: 0 !important; }
-.no-padding-bottom { padding-bottom: 0 !important; }
-.no-padding { padding: 0 !important; }
+http://stackoverflow.com/questions/19562903/remove-padding-from-columns-in-bootstrap-3 */
+.no-padding-left {
+    padding-left: 0 !important;
+}
+.no-padding-right {
+    padding-right: 0 !important;
+}
+.no-padding-top {
+    padding-top: 0 !important;
+}
+.no-padding-bottom {
+    padding-bottom: 0 !important;
+}
+.no-padding {
+    padding: 0 !important;
+}
 
 /* bootstrap 3 input-group 100% width
-   http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
-.width-min { width: 1% !important; }
+http://stackoverflow.com/questions/23436430/bootstrap-3-input-group-100-width */
+.width-min {
+    width: 1% !important;
+}
 
 /* Makes toolbar not wrap on smaller screens
- http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
+http://www.sketchingwithcss.com/samplechapter/cheatsheet.html#right */
 .flex-btn-group-container {
-   display: -webkit-flex;
-   display: flex;
-   -webkit-flex-direction: row;
-   flex-direction: row;
-   -webkit-justify-content: flex-end;
-   justify-content: flex-end;
+    display: -webkit-flex;
+    display: flex;
+    -webkit-flex-direction: row;
+    flex-direction: row;
+    -webkit-justify-content: flex-end;
+    justify-content: flex-end;
 }
 
 /* ==========================================================================
@@ -180,61 +200,28 @@ entity detail page css
 /* ==========================================================================
 ui bootstrap tweaks
 ========================================================================== */
-.nav, .pagination, .carousel, .panel-title a {
+.nav,
+.pagination,
+.carousel,
+.card-title a {
     cursor: pointer;
 }
 
-.datetime-picker-dropdown > li.date-picker-menu div > table .btn-default,
-.uib-datepicker-popup  > li > div.uib-datepicker > table .btn-default {
+.datetime-picker-dropdown > li.date-picker-menu div > table .btn-secondary,
+.uib-datepicker-popup > li > div.uib-datepicker > table .btn-secondary {
     border: 0;
 }
 
 .datetime-picker-dropdown > li.date-picker-menu div > table:focus,
-.uib-datepicker-popup  > li > div.uib-datepicker > table:focus {
+.uib-datepicker-popup > li > div.uib-datepicker > table:focus {
     outline: none;
 }
 
-/* ==========================================================================
-Social Buttons
-========================================================================== */
-
-.jh-btn-social {
-    margin-bottom: 5px;
+.thread-dump-modal-lock {
+    max-width: 450px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.jh-btn-google {
-    background-color: #dd4b39;
-    border-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
-}
-
-.jh-btn-google:hover, .jh-btn-google:focus, .jh-btn-google:active, .jh-btn-google.active, .open > .dropdown-toggle.jh-btn-google {
-    background-color: #c23321;
-    border-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
-}
-
-.jh-btn-facebook {
-    background-color: #3b5998;
-    border-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
-}
-
-.jh-btn-facebook:hover, .jh-btn-facebook:focus, .jh-btn-facebook:active, .jh-btn-facebook.active, .open > .dropdown-toggle.jh-btn-facebook {
-    background-color: #2d4373;
-    border-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
-}
-
-.jh-btn-twitter {
-    background-color: #55acee;
-    border-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
-}
-
-.jh-btn-twitter:hover, .jh-btn-twitter:focus, .jh-btn-twitter:active, .jh-btn-twitter.active, .open > .dropdown-toggle.jh-btn-twitter {
-    background-color: #2795e9;
-    border-color: rgba(0, 0, 0, 0.2);
-    color: #fff;
-}
 /* jhipster-needle-css-add-main JHipster will add new css style */

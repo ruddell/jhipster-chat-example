@@ -1,62 +1,69 @@
 import { Component, OnDestroy } from '@angular/core';
-import { EventManager, AlertService } from 'ng-jhipster';
-import { Subscription } from 'rxjs/Rx';
+import { JhiEventManager, JhiAlert, JhiAlertService } from 'ng-jhipster';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'jhi-alert-error',
     template: `
         <div class="alerts" role="alert">
-            <div *ngFor="let alert of alerts"  [ngClass]="{\'alert.position\': true, \'toast\': alert.toast}">
-                <ngb-alert type="{{alert.type}}" close="alert.close(alerts)"><pre>{{ alert.msg }}</pre></ngb-alert>
+            <div *ngFor="let alert of alerts" [ngClass]="setClasses(alert)">
+                <ngb-alert *ngIf="alert && alert.type && alert.msg" [type]="alert.type" (close)="alert.close(alerts)">
+                    <pre [innerHTML]="alert.msg"></pre>
+                </ngb-alert>
             </div>
         </div>`
 })
 export class JhiAlertErrorComponent implements OnDestroy {
-
     alerts: any[];
     cleanHttpErrorListener: Subscription;
-
-    constructor(private alertService: AlertService, private eventManager: EventManager) {
+    /* tslint:disable */
+    constructor(private alertService: JhiAlertService, private eventManager: JhiEventManager) {
+        /* tslint:enable */
         this.alerts = [];
 
-        this.cleanHttpErrorListener = eventManager.subscribe('chatApp.httpError', (response) => {
+        this.cleanHttpErrorListener = eventManager.subscribe('chatApp.httpError', response => {
             let i;
-            let httpResponse = response.content;
-            switch (httpResponse.status) {
+            const httpErrorResponse = response.content;
+            switch (httpErrorResponse.status) {
                 // connection refused, server not reachable
                 case 0:
                     this.addErrorAlert('Server not reachable', 'error.server.not.reachable');
                     break;
 
                 case 400:
-                    let arr = Array.from(httpResponse.headers._headers);
-                    let headers = [];
-                    for (i = 0; i < arr.length; i++) {
-                        if (arr[i][0].endsWith('app-error') || arr[i][0].endsWith('app-params')) {
-                            headers.push(arr[i][0]);
+                    const arr = httpErrorResponse.headers.keys();
+                    let errorHeader = null;
+                    let entityKey = null;
+                    arr.forEach(entry => {
+                        if (entry.toLowerCase().endsWith('app-error')) {
+                            errorHeader = httpErrorResponse.headers.get(entry);
+                        } else if (entry.toLowerCase().endsWith('app-params')) {
+                            entityKey = httpErrorResponse.headers.get(entry);
                         }
-                    }
-                    headers.sort();
-                    let errorHeader = httpResponse.headers.get(headers[0]);
-                    let entityKey = httpResponse.headers.get(headers[1]);
+                    });
                     if (errorHeader) {
-                        let entityName = entityKey;
-                        this.addErrorAlert(errorHeader, errorHeader, {entityName: entityName});
-                    } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().fieldErrors) {
-                        let fieldErrors = httpResponse.json().fieldErrors;
+                        const entityName = entityKey;
+                        this.addErrorAlert(errorHeader, errorHeader, { entityName });
+                    } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.fieldErrors) {
+                        const fieldErrors = httpErrorResponse.error.fieldErrors;
                         for (i = 0; i < fieldErrors.length; i++) {
-                            let fieldError = fieldErrors[i];
+                            const fieldError = fieldErrors[i];
+                            if (['Min', 'Max', 'DecimalMin', 'DecimalMax'].includes(fieldError.message)) {
+                                fieldError.message = 'Size';
+                            }
                             // convert 'something[14].other[4].id' to 'something[].other[].id' so translations can be written to it
-                            let convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
-                            let fieldName = convertedField.charAt(0).toUpperCase() +
-                                convertedField.slice(1);
-                            this.addErrorAlert(
-                                'Field ' + fieldName + ' cannot be empty', 'error.' + fieldError.message, {fieldName: fieldName});
+                            const convertedField = fieldError.field.replace(/\[\d*\]/g, '[]');
+                            const fieldName = convertedField.charAt(0).toUpperCase() + convertedField.slice(1);
+                            this.addErrorAlert('Error on field "' + fieldName + '"', 'error.' + fieldError.message, { fieldName });
                         }
-                    } else if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
-                        this.addErrorAlert(httpResponse.json().message, httpResponse.json().message, httpResponse.json());
+                    } else if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
+                        this.addErrorAlert(
+                            httpErrorResponse.error.message,
+                            httpErrorResponse.error.message,
+                            httpErrorResponse.error.params
+                        );
                     } else {
-                        this.addErrorAlert(httpResponse.text());
+                        this.addErrorAlert(httpErrorResponse.error);
                     }
                     break;
 
@@ -65,13 +72,20 @@ export class JhiAlertErrorComponent implements OnDestroy {
                     break;
 
                 default:
-                    if (httpResponse.text() !== '' && httpResponse.json() && httpResponse.json().message) {
-                        this.addErrorAlert(httpResponse.json().message);
+                    if (httpErrorResponse.error !== '' && httpErrorResponse.error.message) {
+                        this.addErrorAlert(httpErrorResponse.error.message);
                     } else {
-                        this.addErrorAlert(JSON.stringify(httpResponse)); // Fixme find a way to parse httpResponse
+                        this.addErrorAlert(httpErrorResponse.error);
                     }
             }
         });
+    }
+
+    setClasses(alert) {
+        return {
+            toast: !!alert.toast,
+            [alert.position]: true
+        };
     }
 
     ngOnDestroy() {
@@ -81,18 +95,15 @@ export class JhiAlertErrorComponent implements OnDestroy {
         }
     }
 
-    addErrorAlert (message, key?, data?) {
-        this.alerts.push(
-            this.alertService.addAlert(
-                {
-                    type: 'danger',
-                    msg: message,
-                    timeout: 5000,
-                    toast: this.alertService.isToast(),
-                    scoped: true
-                },
-                this.alerts
-            )
-        );
+    addErrorAlert(message, key?, data?) {
+        const newAlert: JhiAlert = {
+            type: 'danger',
+            msg: message,
+            timeout: 5000,
+            toast: this.alertService.isToast(),
+            scoped: true
+        };
+
+        this.alerts.push(this.alertService.addAlert(newAlert, this.alerts));
     }
 }

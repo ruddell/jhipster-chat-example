@@ -1,23 +1,12 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { RouterModule } from '@angular/router';
 
-import { ChatSharedModule } from '../shared';
-
+import { ChatSharedModule } from 'app/shared';
 import { HOME_ROUTE, HomeComponent } from './';
 
-
 @NgModule({
-    imports: [
-        ChatSharedModule,
-        RouterModule.forRoot([ HOME_ROUTE ], { useHash: true })
-    ],
-    declarations: [
-        HomeComponent,
-    ],
-    entryComponents: [
-    ],
-    providers: [
-    ],
+    imports: [ChatSharedModule, RouterModule.forChild([HOME_ROUTE])],
+    declarations: [HomeComponent],
     schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })
 export class ChatHomeModule {}

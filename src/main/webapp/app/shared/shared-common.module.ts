@@ -1,41 +1,10 @@
-import { NgModule, Sanitizer } from '@angular/core';
-import { Title } from '@angular/platform-browser';
+import { NgModule } from '@angular/core';
 
-import { AlertService } from 'ng-jhipster';
-
-import {
-    ChatSharedLibsModule,
-    JhiAlertComponent,
-    JhiAlertErrorComponent
-} from './';
-
-
-export function alertServiceProvider(sanitizer: Sanitizer) {
-    // set below to true to make alerts look like toast
-    let isToast = false;
-    return new AlertService(sanitizer, isToast);
-}
+import { ChatSharedLibsModule, JhiAlertComponent, JhiAlertErrorComponent } from './';
 
 @NgModule({
-    imports: [
-        ChatSharedLibsModule
-    ],
-    declarations: [
-        JhiAlertComponent,
-        JhiAlertErrorComponent
-    ],
-    providers: [
-        {
-            provide: AlertService,
-            useFactory: alertServiceProvider,
-            deps: [Sanitizer]
-        },
-        Title
-    ],
-    exports: [
-        ChatSharedLibsModule,
-        JhiAlertComponent,
-        JhiAlertErrorComponent
-    ]
+    imports: [ChatSharedLibsModule],
+    declarations: [JhiAlertComponent, JhiAlertErrorComponent],
+    exports: [ChatSharedLibsModule, JhiAlertComponent, JhiAlertErrorComponent]
 })
 export class ChatSharedCommonModule {}

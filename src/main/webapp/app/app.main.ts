@@ -8,4 +8,7 @@ if (module['hot']) {
     module['hot'].accept();
 }
 
-platformBrowserDynamic().bootstrapModule(ChatAppModule);
+platformBrowserDynamic()
+    .bootstrapModule(ChatAppModule, { preserveWhitespaces: true })
+    .then(success => console.log(`Application started`))
+    .catch(err => console.error(err));
