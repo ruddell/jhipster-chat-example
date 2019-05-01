@@ -16,6 +16,8 @@ public class WebsocketSecurityConfiguration extends AbstractSecurityWebSocketMes
             // matches any destination that starts with /chat/private and /chat/*
             .simpDestMatchers("/chat/private*").hasAuthority(AuthoritiesConstants.USER)
             .simpDestMatchers("/chat/**").permitAll()
+            .simpDestMatchers("/topic/tracker").hasAuthority(AuthoritiesConstants.ADMIN)
+            .simpDestMatchers("/topic/**").authenticated()
             // message types other than MESSAGE and SUBSCRIBE
             .simpTypeMatchers(SimpMessageType.MESSAGE, SimpMessageType.SUBSCRIBE).denyAll()
             // catch all

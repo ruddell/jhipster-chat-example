@@ -1,12 +1,10 @@
 import { Injectable, Inject } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { Observable, Observer, Subscription } from 'rxjs/Rx';
+import { Observable, Observer, Subscription } from 'rxjs';
 
-import { CSRFService } from '../auth/csrf.service';
-import { AuthServerProvider } from '../auth/auth-jwt.service';
-
-import SockJS = require('sockjs-client');
-import Stomp = require('webstomp-client');
+import * as SockJS from 'sockjs-client';
+import * as Stomp from 'webstomp-client';
+import { CSRFService, AuthServerProvider, WindowRef } from 'app/core';
 
 @Injectable()
 export class ChatService {
@@ -22,8 +20,7 @@ export class ChatService {
     constructor(
         private router: Router,
         private authServerProvider: AuthServerProvider,
-        private $document: Document,
-        private $window: Window,
+        private $window: WindowRef,
         private csrfService: CSRFService
     ) {
         this.connection = this.createConnection();
@@ -35,7 +32,7 @@ export class ChatService {
             this.connection = this.createConnection();
         }
         // building absolute path so that websocket doesnt fail when deploying with a context path
-        const loc = this.$window.location;
+        const loc = this.$window.nativeWindow.location;
         let url = '//' + loc.host + loc.pathname + 'websocket/chat';
         const authToken = this.authServerProvider.getToken();
         if (authToken) {
@@ -43,7 +40,7 @@ export class ChatService {
         }
         const socket = new SockJS(url);
         this.stompClient = Stomp.over(socket);
-        let headers = {};
+        const headers = {};
         this.stompClient.connect(headers, () => {
             this.connectedPromise('success');
             this.connectedPromise = null;
@@ -74,7 +71,7 @@ export class ChatService {
         if (this.stompClient !== null && this.stompClient.connected) {
             this.stompClient.send(
                 '/chat', // destination
-                JSON.stringify({ message: message }), // body
+                JSON.stringify({ message }), // body
                 {} // header
             );
         }

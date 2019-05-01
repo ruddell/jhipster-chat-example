@@ -17,7 +17,7 @@
         "serviceDiscoveryType": false,
         "buildTool": "maven",
         "enableSocialSignIn": true,
-        "jwtSecretKey": "1884df9e0019fef70832c06c7fe2c9970c613060",
+        "jwtSecretKey": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
         "clientFramework": "angularX",
         "useSass": false,
         "clientPackageManager": "npm",
@@ -29,6 +29,8 @@
         "enableHibernateCache": false,
         "entitySuffix": "",
         "dtoSuffix": "DTO",
-        "otherModules": []
+        "otherModules": [],
+        "herokuAppName": "jhipster-chat-v-5",
+        "herokuDeployType": "git"
     }
 }

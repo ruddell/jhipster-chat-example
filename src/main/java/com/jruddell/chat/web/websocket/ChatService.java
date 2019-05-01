@@ -36,7 +36,7 @@ public class ChatService implements ApplicationListener<SessionDisconnectEvent> 
 
     @SubscribeMapping("/chat/public")
     public void subscribe(StompHeaderAccessor stompHeaderAccessor, Principal principal) {
-        String login = SecurityUtils.getCurrentUserLogin();
+        String login = SecurityUtils.getCurrentUserLogin().orElse("anonymoususer");
         String ipAddress = stompHeaderAccessor.getSessionAttributes().get(IP_ADDRESS).toString();
         log.debug("User {} subscribed to Chat from IP {}", login, ipAddress);
         MessageDTO messageDTO = new MessageDTO();

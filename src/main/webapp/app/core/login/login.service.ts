@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { AccountService } from 'app/core/auth/account.service';
 import { AuthServerProvider } from 'app/core/auth/auth-jwt.service';
 import { JhiTrackerService } from 'app/core/tracker/tracker.service';
-import { EventManager } from 'ng-jhipster';
+import { JhiEventManager } from 'ng-jhipster';
 
 @Injectable({ providedIn: 'root' })
 export class LoginService {
@@ -11,7 +11,7 @@ export class LoginService {
         private accountService: AccountService,
         private trackerService: JhiTrackerService,
         private authServerProvider: AuthServerProvider,
-        private eventManager: EventManager
+        private eventManager: JhiEventManager
     ) {}
 
     login(credentials, callback?) {
