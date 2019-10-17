@@ -1,0 +1,41 @@
+{
+  "generator-jhipster": {
+    "jhipsterVersion": "6.3.1",
+    "baseName": "chat",
+    "packageName": "com.jruddell.chat",
+    "packageFolder": "com/jruddell/chat",
+    "serverPort": "8080",
+    "authenticationType": "jwt",
+    "hibernateCache": "no",
+    "clusteredHttpSession": false,
+    "websocket": "spring-websocket",
+    "databaseType": "sql",
+    "devDatabaseType": "h2Disk",
+    "prodDatabaseType": "mysql",
+    "searchEngine": false,
+    "messageBroker": false,
+    "serviceDiscoveryType": false,
+    "buildTool": "maven",
+    "enableSocialSignIn": true,
+    "jwtSecretKey": "bXktc2VjcmV0LWtleS13aGljaC1zaG91bGQtYmUtY2hhbmdlZC1pbi1wcm9kdWN0aW9uLWFuZC1iZS1iYXNlNjQtZW5jb2RlZAo=",
+    "clientFramework": "angularX",
+    "useSass": true,
+    "clientPackageManager": "npm",
+    "applicationType": "monolith",
+    "testFrameworks": [
+      "protractor"
+    ],
+    "jhiPrefix": "jhi",
+    "enableTranslation": false,
+    "cacheProvider": "no",
+    "enableHibernateCache": false,
+    "entitySuffix": "",
+    "dtoSuffix": "DTO",
+    "otherModules": [],
+    "herokuAppName": "jhipster-chat-v-5",
+    "herokuDeployType": "git",
+    "embeddableLaunchScript": false,
+    "clientTheme": "none",
+    "blueprints": []
+  }
+}
