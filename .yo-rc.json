@@ -22,9 +22,7 @@
     "useSass": true,
     "clientPackageManager": "npm",
     "applicationType": "monolith",
-    "testFrameworks": [
-      "protractor"
-    ],
+    "testFrameworks": ["protractor"],
     "jhiPrefix": "jhi",
     "enableTranslation": false,
     "cacheProvider": "no",
@@ -32,7 +30,7 @@
     "entitySuffix": "",
     "dtoSuffix": "DTO",
     "otherModules": [],
-    "herokuAppName": "jhipster-chat-v-5",
+    "herokuAppName": "jhipster-chat-v-6",
     "herokuDeployType": "git",
     "embeddableLaunchScript": false,
     "clientTheme": "none",
