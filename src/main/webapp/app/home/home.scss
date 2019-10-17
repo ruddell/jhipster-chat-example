@@ -21,3 +21,14 @@ Main page styles
     background-size: contain;
   }
 }
+
+.chat-input {
+  position: absolute;
+  right: 0;
+  left: 30px;
+  bottom: 0;
+}
+.chat-messages {
+  overflow-y: scroll;
+  max-height: 400px;
+}
